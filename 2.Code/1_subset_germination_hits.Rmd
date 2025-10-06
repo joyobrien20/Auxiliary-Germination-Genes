@@ -1,0 +1,54 @@
+---
+title: "inphared_germination_hits"
+author: "Joy O'Brien"
+date: "2025-08-11"
+output: html_document
+---
+The goal of this script is to subset and identify germination genes in phages listed in the database INphared. 
+
+Prior to running this script, INphared database was split in half due to size, and then ran through Metacerberus separately for gene annotation which was followed by protein annotation with KEGG and pFam
+
+Joy is working specifically on the pFam annotations
+El will do the KEGG annotations
+
+Joy will take the two metacerberus pfam annotations (annotation_summary_PFAM.tsv) from each half of the inphared run, combine, and merge them with our SporGermDb metadata (germspore_Db.tsv). (You will also want to subset out the proteins in the SporGermDb that are just sporulation -- keep only germination)
+
+1. Set working directory
+```{r}
+setwd("~/GitHub/Auxiliary-Germination-Genes")
+```
+
+2. Load packages and read in data
+```{r}
+# Load libraries 
+library(readr)
+# Load in the metacereberus hits from first half Inphared (a)
+metacer_inpha1 <- read_tsv("~/GitHub/Auxiliary-Germination-Genes/1.Data/final_annotation_summary_a.tsv")
+# Load in the metacereberus hits from the second half of Inphared (b)
+metacer_inpha2 <- read_tsv("~/GitHub/Auxiliary-Germination-Genes/1.Data/final_annotation_summary_b.tsv")
+# Load in the SporeGermDB
+sporgerm_db <- read_csv("~/GitHub/Auxiliary-Germination-Genes/1.Data/UniprotSporGerm_Master.csv")
+
+# Below is the data that I think we actually need (?)
+# PFAM annotations A
+pfam.a <- read_tsv("~/GitHub/Auxiliary-Germination-Genes/1.Data/annotation_summary_PFAM_a.tsv")
+
+# PFAM annotations B
+pfam.b <- read_tsv("~/GitHub/Auxiliary-Germination-Genes/1.Data/annotation_summary_PFAM_ba.tsv")
+
+```
+
+3. Combine the PFAM annotations
+```{r}
+pfam.annotation.full <- rbind(pfam.a, pfam.b)
+```
+
+4. Merge PFAM annotations with SporeGerm DB
+```{r}
+library(dplyr)
+pfam.db <- left_join(sporgerm_db, pfam.annotation.full, by = ) # I think we will be combining by columns Pfam and target 
+
+
+# Subset for germination 
+```
+
